@@ -1,5 +1,6 @@
 package io.github.carlossmariano.comunex.usuario.service;
 
+import io.github.carlossmariano.comunex.bairro.service.BairroService;
 import io.github.carlossmariano.comunex.usuario.dto.request.CadastroUsuarioRequest;
 import io.github.carlossmariano.comunex.usuario.dto.response.UsuarioResponse;
 import io.github.carlossmariano.comunex.usuario.entity.Usuario;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final BairroService bairroService;
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
@@ -58,7 +60,14 @@ public class UsuarioService {
         if (request.idBairro() == null){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "É necessário informr um bairro."
+                    "É necessário informar um bairro."
+            );
+        }
+
+        if (!bairroService.existePorId(request.idBairro())){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Bairro não encontrado."
             );
         }
 
