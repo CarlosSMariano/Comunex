@@ -1,5 +1,5 @@
-package io.github.carlossmariano.comunex.usuario.dto.request;
 
+package io.github.carlossmariano.comunex.usuario.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +26,15 @@ public record CadastroUsuarioRequest(
         @NotBlank
         String tipoPerfil,
 
-        Long idBairro
+        Long idBairro,
 
-) {
-}
+        @Size(max = 100)
+        String nomeBairro,
+
+        @Size(max = 100)
+        String municipio,
+
+        @Size(min = 2, max = 2)
+        String estado
+
+) {}
