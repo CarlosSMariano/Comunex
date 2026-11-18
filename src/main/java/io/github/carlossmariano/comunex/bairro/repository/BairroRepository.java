@@ -1,0 +1,9 @@
+package io.github.carlossmariano.comunex.bairro.repository;
+
+import io.github.carlossmariano.comunex.bairro.entity.Bairro;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BairroRepository extends JpaRepository<Bairro, Long> {
+}
