@@ -16,7 +16,17 @@ public record CadastroUsuarioRequest(
         @Size(max = 150)
         String email,
 
+        @NotBlank
+        @Size(min = 8, max = 72)
+        String senha,
+
         @Size(max = 500)
-        String descricao
+        String descricao,
+
+        @NotBlank
+        String tipoPerfil,
+
+        Long idBairro
+
 ) {
 }

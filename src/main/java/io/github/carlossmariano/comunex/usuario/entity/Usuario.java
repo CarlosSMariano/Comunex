@@ -13,9 +13,9 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
-    private Long id;
+    private Long idUsuario;
 
-    @Column(name = "ID_BAIRRO")
+    @Column(name = "ID_BAIRRO", nullable = false)
     private Long idBairro;
 
     @Column(name = "NOME", nullable = false, length = 120)
@@ -41,12 +41,12 @@ public class Usuario {
     )
     private LocalDateTime dataCadastro;
 
-    public Long getId() {
-        return id;
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Long getIdBairro() {

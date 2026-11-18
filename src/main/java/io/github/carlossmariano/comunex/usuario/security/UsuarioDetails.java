@@ -37,7 +37,7 @@ public class UsuarioDetails implements UserDetails {
     }
 
     public Long getId(){
-        return usuario.getId();
+        return usuario.getIdUsuario();
     }
 
     public Usuario getUsuario(){
