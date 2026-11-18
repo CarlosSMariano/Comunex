@@ -28,10 +28,10 @@ import java.util.Base64;
 @Configuration
 public class JwtConfig {
 
-    @Value("${jwt.private-key}")
+    @Value("${app.jwt.private-key}")
     private Resource privateKeyResource;
 
-    @Value("${jwt.public-key}")
+    @Value("${app.jwt.public-key}")
     private Resource publicKeyResource;
 
     @Bean
