@@ -13,7 +13,7 @@ Plataforma que conecta moradores, organizações e comunidades, ajudando a ident
 
 ## Acesso à API
 
-**URL base:** `https://SUA-API.onrender.com`
+**URL base:** `https://comunex.onrender.com`
 
 ## Tecnologias utilizadas
 
