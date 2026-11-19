@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.Resource;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -31,18 +28,17 @@ import java.util.Base64;
 public class JwtConfig {
 
     @Value("${app.jwt.private-key}")
-    private Resource privateKeyResource;
+    private String privateKeyPem;
 
     @Value("${app.jwt.public-key}")
-    private Resource publicKeyResource;
+    private String publicKeyPem;
 
     @Bean
     public RSAPrivateKey rsaPrivateKey() {
         try {
-            String pem = readPem(privateKeyResource);
-            byte[] decoded = Base64.getDecoder().decode(
-                    pem.replaceAll("\\s", "")
-            );
+            String pem = readPem(privateKeyPem);
+
+            byte[] decoded = Base64.getDecoder().decode(pem);
 
             KeyFactory factory = KeyFactory.getInstance("RSA");
 
@@ -60,10 +56,9 @@ public class JwtConfig {
     @Bean
     public RSAPublicKey rsaPublicKey() {
         try {
-            String pem = readPem(publicKeyResource);
-            byte[] decoded = Base64.getDecoder().decode(
-                    pem.replaceAll("\\s", "")
-            );
+            String pem = readPem(publicKeyPem);
+
+            byte[] decoded = Base64.getDecoder().decode(pem);
 
             KeyFactory factory = KeyFactory.getInstance("RSA");
 
@@ -98,13 +93,11 @@ public class JwtConfig {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 
-    private String readPem(Resource resource) throws IOException {
-        String pem = new String(
-                resource.getInputStream().readAllBytes()
-        );
-
+    private String readPem(String pem) {
         return pem
+                .replace("\\n", "\n")
                 .replaceAll("-----BEGIN [^-]+-----", "")
-                .replaceAll("-----END [^-]+-----", "");
+                .replaceAll("-----END [^-]+-----", "")
+                .replaceAll("\\s", "");
     }
 }
