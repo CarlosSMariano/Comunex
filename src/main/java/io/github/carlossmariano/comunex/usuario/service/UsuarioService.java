@@ -131,4 +131,54 @@ public class UsuarioService {
                 usuarioSalvo.getDataCadastro()
         );
     }
+
+    public UsuarioResponse buscarPorEmail(String email){
+       Usuario usuario = usuarioRepository.findByEmail(email)
+               .orElseThrow(() -> new ResponseStatusException(
+                       HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+       return new UsuarioResponse(
+               usuario.getIdUsuario(),
+               usuario.getIdBairro(),
+               usuario.getNome(),
+               usuario.getEmail(),
+               usuario.getDescricao(),
+               usuario.getTipoPerfil(),
+               usuario.getDataCadastro()
+       );
+    }
+
+    @Transactional
+    public UsuarioResponse atualizarPerfil(String email, String nome, String descricao){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        if(nome != null && !nome.isBlank()){
+            usuario.setNome(nome);
+        }
+
+        if(descricao != null && !descricao.isBlank()){
+            usuario.setDescricao(descricao);
+        }
+        return new UsuarioResponse(
+                usuario.getIdUsuario(),
+                usuario.getIdBairro(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getDescricao(),
+                usuario.getTipoPerfil(),
+                usuario.getDataCadastro()
+        );
+
+    }
+
+    @Transactional
+    public void deletarConta(String email){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        usuarioRepository.delete(usuario);
+    }
 }
