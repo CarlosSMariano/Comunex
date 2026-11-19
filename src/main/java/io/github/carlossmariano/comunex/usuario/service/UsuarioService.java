@@ -3,6 +3,7 @@ package io.github.carlossmariano.comunex.usuario.service;
 
 import io.github.carlossmariano.comunex.bairro.entity.Bairro;
 import io.github.carlossmariano.comunex.bairro.service.BairroService;
+import io.github.carlossmariano.comunex.usuario.dto.request.AtualizarUsuarioRequest;
 import io.github.carlossmariano.comunex.usuario.dto.request.CadastroUsuarioRequest;
 import io.github.carlossmariano.comunex.usuario.dto.response.UsuarioResponse;
 import io.github.carlossmariano.comunex.usuario.entity.Usuario;
@@ -149,18 +150,19 @@ public class UsuarioService {
     }
 
     @Transactional
-    public UsuarioResponse atualizarPerfil(String email, String nome, String descricao){
+    public UsuarioResponse atualizarPerfil(String email, AtualizarUsuarioRequest request){
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-        if(nome != null && !nome.isBlank()){
-            usuario.setNome(nome);
+        if(request.nome() != null && !request.nome().isBlank()){
+            usuario.setNome(request.nome());
         }
 
-        if(descricao != null && !descricao.isBlank()){
-            usuario.setDescricao(descricao);
+        if(request.descricao() != null && !request.descricao().isBlank()){
+            usuario.setDescricao(request.descricao());
         }
+
         return new UsuarioResponse(
                 usuario.getIdUsuario(),
                 usuario.getIdBairro(),
