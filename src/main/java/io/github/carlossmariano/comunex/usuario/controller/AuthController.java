@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -44,24 +45,30 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UsuarioResponse> buscaPorEmail(@AuthenticationPrincipal UserDetails userDetails){
-        UsuarioResponse response = usuarioService.buscarPorEmail(userDetails.getUsername());
+    public ResponseEntity<UsuarioResponse> buscaPorEmail(
+            @AuthenticationPrincipal Jwt jwt) {
+
+        UsuarioResponse response =
+                usuarioService.buscarPorEmail(jwt.getSubject());
 
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirConta(@AuthenticationPrincipal UserDetails userDetails){
-        usuarioService.deletarConta(userDetails.getUsername());
+    public void excluirConta(@AuthenticationPrincipal Jwt jwt) {
+        usuarioService.deletarConta(jwt.getSubject());
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UsuarioResponse> atualizarConta(@Valid @RequestBody AtualizarUsuarioRequest request,
-                                                          @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<UsuarioResponse> atualizarConta(
+            @Valid @RequestBody AtualizarUsuarioRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+
         UsuarioResponse response = usuarioService.atualizarPerfil(
-                userDetails.getUsername(),
-                request);
+                jwt.getSubject(),
+                request
+        );
 
         return ResponseEntity.ok(response);
     }
